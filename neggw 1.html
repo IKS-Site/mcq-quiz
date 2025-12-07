@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Indian Knowledge System — MCQ (Interactive)</title>
+  <style>
+    :root{
+      --bg-1: #fffbf2;
+      --bg-2: #f5f7ff;
+      --card: #ffffff;
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 10px 30px rgba(11,20,40,0.06);
+      --radius:16px;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#fffaf6 0%, #f5f7ff 100%);
+      color:#071023;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      box-sizing:border-box;
+    }
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
+    }
+
+    .banner{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      background:linear-gradient(90deg,#7c3aed 0%, #06b6d4 100%);
+      color:#fff;
+      padding:18px;
+      border-radius:12px;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.14);
+      margin-bottom:18px;
+    }
+    .badge-subject{
+      background: rgba(255,255,255,0.12);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:0.2px;
+    }
+    .banner h1{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+      line-height:1;
+    }
+    .banner p{
+      margin:0;
+      opacity:0.95;
+      font-size:13px;
+    }
+
+    .top-right{
+      margin-left:auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      border:0;
+      font-weight:700;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      background:rgba(255,255,255,0.16);
+      color:#fff;
+      backdrop-filter: blur(4px);
+    }
+    .btn.ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.12);
+    }
+
+    .meta-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin:12px 0 20px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .quiz{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .stripe-0{ border-left:8px solid #ff6b6b; }
+    .stripe-1{ border-left:8px solid #f59e0b; }
+    .stripe-2{ border-left:8px solid #10b981; }
+    .stripe-3{ border-left:8px solid #06b6d4; }
+    .stripe-4{ border-left:8px solid #7c3aed; }
+
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      padding:14px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      transition: transform .14s ease, box-shadow .14s ease;
+      overflow:hidden;
+    }
+    .card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(10,20,40,0.08); }
+
+    .q-head{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .q-num{
+      font-weight:800;
+      color:#0f172a;
+      background:linear-gradient(90deg,#fff 0,#fbfdff 100%);
+      padding:8px 10px;
+      border-radius:10px;
+      min-width:46px;
+      text-align:center;
+      box-shadow: 0 6px 18px rgba(12,20,40,0.04);
+      font-size:14px;
+    }
+    .q-text{
+      font-size:15px;
+      font-weight:700;
+      color:#062b3a;
+      line-height:1.3;
+    }
+    .options{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:4px;
+    }
+    .opt{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid rgba(7,18,35,0.06);
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
+      background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      user-select:none;
+    }
+    .opt:hover{ transform: translateY(-4px); box-shadow:0 16px 36px rgba(8,18,40,0.06); }
+    .opt .lbl{
+      font-weight:800;
+      min-width:28px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .opt .txt{
+      flex:1;
+      font-size:14px;
+      color:#102630;
+    }
+
+    .opt.correct{
+      border-color: rgba(16,185,129,0.12);
+      background: linear-gradient(90deg, rgba(34,197,94,0.06), rgba(240,253,244,0.04));
+      box-shadow: 0 12px 28px rgba(34,197,94,0.04);
+      position:relative;
+    }
+    .opt.wrong{
+      border-color: rgba(239,68,68,0.12);
+      background: linear-gradient(90deg, rgba(254,226,226,0.02), rgba(255,240,240,0.02));
+      box-shadow: 0 12px 28px rgba(239,68,68,0.04);
+      opacity:0.98;
+      position:relative;
+    }
+    .badge{
+      margin-left:8px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:13px;
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .badge.correct{ background: linear-gradient(90deg,#10b981,#059669); }
+    .badge.wrong{ background: linear-gradient(90deg,#ef4444,#dc2626); }
+
+    .card .meta{
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:6px;
+    }
+
+    footer.page-foot{
+      margin-top:20px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:720px){
+      body{ padding:14px; }
+      .banner{ flex-direction:column; align-items:flex-start; gap:8px; }
+      .top-right{ margin-left:0; align-self:stretch; justify-content:space-between; width:100%;}
+      .q-num{ min-width:38px; padding:6px; font-size:13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="banner" role="banner">
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div class="badge-subject">Subject</div>
+          <h1>Indian Knowledge System — MCQ</h1>
+        </div>
+        <p style="margin-top:6px; opacity:0.95;">Click any option — correct choice will be highlighted. Badges show English labels only.</p>
+      </div>
+
+      <div class="top-right" aria-hidden="true">
+        <button id="showAll" class="btn">Show All Answers</button>
+        <button id="resetBtn" class="btn ghost">Reset</button>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <div id="progress">Questions: <strong id="totalCount">0</strong></div>
+      <div>Answered: <strong id="answeredCount">0</strong></div>
+      <div>Correct: <strong id="correctCount">0</strong></div>
+    </div>
+
+    <main class="quiz" id="quiz"></main>
+
+    <footer class="page-foot">
+      Created by <strong>Maruf Hassan</strong> — Indian Knowledge System MCQ.
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      const questions = [
+        { q: "Sulbasutras are ancient Indian texts mainly dealing with:", opts: ["Algebra","Geometry of altar construction","Astronomy","Trigonometry"], a: 1 },
+        { q: "Which Sulbasutra is considered the oldest?", opts: ["Apastamba Sulbasutra","Baudhayana Sulbasutra","Manava Sulbasutra","Katyayana Sulbasutra"], a: 1 },
+        { q: "The Sulbasutras contain an approximate value for √2. Who first mentioned it?", opts: ["Aryabhata","Bhaskara I","Baudhayana","Brahmagupta"], a: 2 },
+        { q: "Which mathematical idea appears in Sulbasutras?", opts: ["Calculus","Pythagorean theorem","Binomial theorem","Differential equations"], a: 1 },
+        { q: "Aryabhatta wrote which famous text?", opts: ["Aryabhatiya","Lilavati","Siddhanta Shiromani","Brahmasphutasiddhanta"], a: 0 },
+        { q: "According to Aryabhatta, the Earth:", opts: ["Is stationary","Rotates on its axis","Revolves around the Sun","Is flat"], a: 1 },
+        { q: "Bhaskaracharya was a pioneer in which branch of mathematics?", opts: ["Differential calculus","Boolean algebra","Topology","Number theory only"], a: 0 },
+        { q: "Bhaskara II gave a clear explanation of which astronomical concept?", opts: ["Heliocentrism","Earth’s rotation","Solar eclipses","Big Bang theory"], a: 2 },
+        { q: "Surya Siddhanta is a text on:", opts: ["Algebra","Astronomy and planetary motions","Geometry","Astrology only"], a: 1 },
+        { q: "Surya Siddhanta suggests that the Earth is:", opts: ["Stationary","Spherical","Flat","Hollow"], a: 1 },
+
+        { q: "The Iron Pillar of Delhi is famous for its:", opts: ["Magnetic properties","Rust-resistant nature","Hollow interior","Decorative carvings"], a: 1 },
+        { q: "The Iron Pillar was erected during the reign of:", opts: ["Ashoka","Chandragupta II","Harsha","Kanishka"], a: 1 },
+        { q: "Rust resistance of the Iron Pillar is mainly due to:", opts: ["High chromium content","Phosphorus-rich iron","Nickel coating","Galvanization"], a: 1 },
+        { q: "Wootz steel originated in ancient:", opts: ["Mesopotamia","India","China","Persia"], a: 1 },
+        { q: "Wootz steel was popularly known in Europe as:", opts: ["Damascus steel","Toledo steel","Sheffield steel","Carbon steel"], a: 0 },
+        { q: "Wootz steel is known for its:", opts: ["Low tensile strength","High carbon content and patterned surface","Low carbon content","Porous structure"], a: 1 },
+        { q: "A key technique in producing Wootz steel involved:", opts: ["Open furnace refining","Crucible smelting","Cold forging","Electroplating"], a: 1 },
+        { q: "The blue dye 'Indigo' was obtained in ancient India from:", opts: ["Mango leaves","Indigofera tinctoria","Neem tree","Turmeric root"], a: 1 },
+        { q: "The red pigment 'Sindoor' contains:", opts: ["HgS (cinnabar)","Fe₂O₃","CuSO₄","Pb₃O₄"], a: 0 },
+        { q: "Turmeric contains the active yellow pigment:", opts: ["Curcumin","Chlorophyll","Anthocyanin","Xanthophyll"], a: 0 },
+
+        { q: "Madder dye (Manjistha) gives which colour?", opts: ["Blue","Green","Red","Black"], a: 2 },
+        { q: "A natural mordant used in ancient dyeing was:", opts: ["Alum","PVC","Urea","Teflon"], a: 0 },
+        { q: "The Nagara style of temple architecture is prominent in:", opts: ["North India","South India","East India","West India only"], a: 0 },
+        { q: "Which ancient Indian city is known for grid-pattern town planning?", opts: ["Varanasi","Mohenjo-Daro","Puri","Ujjain"], a: 1 },
+        { q: "Vastu Shastra deals with principles of:", opts: ["Sculpture","Architecture and layout","Poetry","Martial arts"], a: 1 },
+        { q: "Stepwells (Vavs/Baoris) were primarily used for:", opts: ["Irrigation only","Water storage and access","Cooking","Metal smelting"], a: 1 },
+        { q: "The famous 'Rani ki Vav' is located in:", opts: ["Karnataka","Tamil Nadu","Gujarat","Rajasthan"], a: 2 }
+      ];
+
+      const quizEl = document.getElementById('quiz');
+      const totalCountEl = document.getElementById('totalCount');
+      const answeredCountEl = document.getElementById('answeredCount');
+      const correctCountEl = document.getElementById('correctCount');
+
+      let answered = 0, correct = 0;
+      totalCountEl.textContent = questions.length;
+
+      function updateProgress(){
+        answeredCountEl.textContent = answered;
+        correctCountEl.textContent = correct;
+      }
+
+      function makeCard(item, idx){
+        const wrapper = document.createElement('div');
+        wrapper.className = 'card stripe-' + (idx % 5);
+        wrapper.dataset.idx = idx;
+
+        const head = document.createElement('div');
+        head.className = 'q-head';
+
+        const num = document.createElement('div');
+        num.className = 'q-num';
+        num.textContent = 'Q' + (idx+1);
+
+        const qtxt = document.createElement('div');
+        qtxt.style.flex = '1';
+
+        const qh = document.createElement('div');
+        qh.className = 'q-text';
+        qh.textContent = item.q;
+
+        qtxt.appendChild(qh);
+        head.appendChild(num);
+        head.appendChild(qtxt);
+
+        wrapper.appendChild(head);
+
+        const opts = document.createElement('div');
+        opts.className = 'options';
+
+        item.opts.forEach((ot, i) => {
+          const o = document.createElement('div');
+          o.className = 'opt';
+          o.dataset.opt = i;
+
+          const lbl = document.createElement('div');
+          lbl.className = 'lbl';
+          lbl.textContent = String.fromCharCode(65 + i) + '.';
+
+          const txt = document.createElement('div');
+          txt.className = 'txt';
+          txt.textContent = ot;
+
+          o.appendChild(lbl);
+          o.appendChild(txt);
+
+          o.addEventListener('click', () => handleSelect(wrapper, idx, i) );
+
+          opts.appendChild(o);
+        });
+
+        wrapper.appendChild(opts);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.innerHTML = '<div></div><div style="font-size:13px;color:var(--muted)"></div>';
+        wrapper.appendChild(meta);
+
+        return wrapper;
+      }
+
+      function handleSelect(card, qIdx, choice){
+        if(card.dataset.answered === 'true') return;
+        const correctIdx = questions[qIdx].a;
+        const optEls = card.querySelectorAll('.opt');
+
+        if(choice === correctIdx){
+          optEls[choice].classList.add('correct');
+          addBadge(optEls[choice], 'Correct', 'correct');
+          card.querySelector('.meta div:first-child').textContent = 'You selected the correct answer.';
+          correct++;
+        } else {
+          optEls[choice].classList.add('wrong');
+          addBadge(optEls[choice], 'Wrong', 'wrong');
+
+          optEls[correctIdx].classList.add('correct');
+          addBadge(optEls[correctIdx], 'Correct', 'correct');
+
+          card.querySelector('.meta div:first-child').textContent = 'Wrong — correct answer highlighted.';
+        }
+
+        card.dataset.answered = 'true';
+        answered++;
+        updateProgress();
+      }
+
+      function addBadge(optEl, text, kind){
+        if(optEl.querySelector('.badge')) return;
+        const b = document.createElement('span');
+        b.className = 'badge ' + (kind === 'correct' ? 'correct' : 'wrong');
+        b.textContent = text;
+        optEl.appendChild(b);
+      }
+
+      function renderAll(){
+        quizEl.innerHTML = '';
+        questions.forEach((q,i) => quizEl.appendChild(makeCard(q,i)));
+        answered = 0;
+        correct = 0;
+        updateProgress();
+        window.scrollTo({top:0, behavior:'auto'});
+      }
+
+      document.getElementById('showAll').addEventListener('click', () => {
+        document.querySelectorAll('.card').forEach(card => {
+          if(card.dataset.answered === 'true') return;
+          const idx = Number(card.dataset.idx);
+          const c = questions[idx].a;
+          const opts = card.querySelectorAll('.opt');
+          opts[c].classList.add('correct');
+          addBadge(opts[c], 'Correct', 'correct');
+          card.dataset.answered = 'true';
+          card.querySelector('.meta div:first-child').textContent = 'Answer revealed.';
+          answered++;
+        });
+        updateProgress();
+      });
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        document.querySelectorAll('.card').forEach(card => {
+          card.dataset.answered = 'false';
+          card.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('correct','wrong');
+            const bd = o.querySelector('.badge');
+            if(bd) bd.remove();
+          });
+          card.querySelector('.meta div:first-child').textContent = '';
+        });
+        answered = 0;
+        correct = 0;
+        updateProgress();
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
